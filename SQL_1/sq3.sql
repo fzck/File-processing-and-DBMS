@@ -1,0 +1,3 @@
+SELECT title
+FROM MOVIE
+WHERE year < 1975
