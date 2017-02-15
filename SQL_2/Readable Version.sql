@@ -32,3 +32,26 @@ JOIN Movie
 ON Movie.mID = Rating.mID
 ORDER BY name, title, stars
 --
+SELECT name, title
+FROM (SELECT name, title, count(Rating.rID) as counter
+      FROM Reviewer
+      JOIN Rating
+      ON Reviewer.rID = Rating.rID
+      JOIN Movie
+      ON Movie.mID = Rating.mID
+      GROUP BY Rating.rID) as rate
+      WHERE rate.counter > 1 LIMIT 1
+--
+SELECT title, MAX(stars)
+FROM Movie
+JOIN Rating
+ON Movie.mID = Rating.mID
+GROUP BY Movie.mID
+ORDER BY title
+--
+SELECT title, MAX(stars) - MIN(stars) AS spread
+FROM Movie
+INNER JOIN Rating USING (mID)
+GROUP BY mID
+ORDER BY spread DESC, title
+--
