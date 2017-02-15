@@ -41,6 +41,15 @@ FROM (SELECT name, title, count(Rating.rID) as counter
       ON Movie.mID = Rating.mID
       GROUP BY Rating.rID) as rate
       WHERE rate.counter > 1 LIMIT 1
+      -- ALTERNATIVE
+SELECT name, title
+FROM (SELECT name, title, count(Rating.rID) as counter
+FROM Reviewer
+INNER JOIN Rating USING(rID)
+INNER JOIN Movie USING(mID)
+GROUP BY Rating.rID) as rate
+WHERE rate.counter > 1 LIMIT 1
+      
 --
 SELECT title, MAX(stars)
 FROM Movie
@@ -55,3 +64,14 @@ INNER JOIN Rating USING (mID)
 GROUP BY mID
 ORDER BY spread DESC, title
 --
+SELECT AVG(before.average) - AVG(after.average)
+FROM (SELECT AVG(stars) as average
+      FROM Movie
+      INNER JOIN Rating USING(mID)
+      WHERE year < 1980 
+      GROUP BY mID) as before,
+     (SELECT AVG(stars) as average
+      FROM Movie
+      INNER JOIN Rating USING(mID)
+      WHERE year > 1980
+      GROUP BY mID) as after
