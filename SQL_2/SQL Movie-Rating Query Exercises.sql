@@ -20,11 +20,19 @@ where mid not in(select mid
 -- Some reviewers didn't provide a date with their rating. 
 -- Find the names of all reviewers who have ratings with a NULL value for the date.
 select name
+from reviewer
+join rating
+on reviewer.rid = Rating.rid
+where ratingdate is null
+
+---alternative
+select name
 from reviewer 
 where rid in 
     (select rid
      from rating 
      where ratingdate is null)
+   
 
 -- Write a query to return the ratings data in a more readable format: 
 -- reviewer name, movie title, stars, and ratingDate.
